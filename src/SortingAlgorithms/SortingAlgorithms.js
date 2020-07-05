@@ -4,6 +4,7 @@ export function getMergeSortEvents(array) {
 	return [animations];
 };
 
+
 function mergeSort(array, startIndex, endIndex, animations) {
 	if (startIndex === endIndex) {
 		return array;
@@ -45,10 +46,43 @@ function mergeArrays(array, startIndex, middleIndex, endIndex, animations) {
 		animations.push([j, mergedArray.length + startIndex, array[j]]);
 		mergedArray.push(array[j++]);
 	}
-
+	
 	for (let i = startIndex; i <= endIndex; i++) {
 		array[i] = mergedArray[i - startIndex];
 	}
-
+	
 	return array;
+}
+
+export function getQuickSortEvents(array) {
+	const animations = [];
+	quickSort(array, 0, array.length - 1, animations);
+	return array;
+};
+
+function quickSort(array, startIndex, endIndex, animations) {
+	if (startIndex >= endIndex) return;
+	const p = partition(array, startIndex, endIndex, animations);
+	quickSort(array, startIndex, p - 1, animations);
+	quickSort(array, p, endIndex, animations);
+}
+
+function partition(array, startIndex, endIndex, animations){
+	const pivot = array[Math.floor((startIndex + endIndex) / 2)];
+	while (startIndex <= endIndex) {
+		while (array[startIndex] < pivot) {
+			startIndex++;
+		}
+
+		while (array[endIndex] > pivot) {
+			endIndex--;
+		}
+
+		if (startIndex <= endIndex){
+			let temp = array[startIndex];
+			array[startIndex++] = array[endIndex];
+			array[endIndex--] = temp;
+		}
+	}
+	return startIndex;
 }

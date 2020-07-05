@@ -2,9 +2,9 @@ import React from 'react';
 import './SortingVisualizer.css';
 import * as SortingAlgorithms from '../SortingAlgorithms/SortingAlgorithms.js'
 
-const NB_ELEMENTS_INIT = 200;
+const NB_ELEMENTS_INIT = 10;
 const MIN_ELEMENTS = 5;
-const MAX_ELEMENTS = 300;
+const MAX_ELEMENTS = 200;
 const MIN_ELEMENT_VALUE = 5;
 const MAX_ELEMENT_VALUE = 900;
 
@@ -77,7 +77,10 @@ export class SortingVisualizer extends React.Component {
 	}
 	
 	quickSort() {
-
+		console.log(this.state.array);
+		var tempArray = SortingAlgorithms.getQuickSortEvents(this.state.array);
+		this.setState(tempArray);
+		console.log(this.state.array);
 	}
 
 	heapSort() {
