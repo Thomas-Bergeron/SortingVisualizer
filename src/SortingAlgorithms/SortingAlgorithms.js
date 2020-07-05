@@ -56,8 +56,8 @@ function mergeArrays(array, startIndex, middleIndex, endIndex, animations) {
 
 export function getQuickSortEvents(array) {
 	const animations = [];
-	quickSort(array, 0, array.length - 1, animations);
-	return array;
+	quickSort(array.slice(), 0, array.length - 1, animations);
+	return [animations];
 };
 
 function quickSort(array, startIndex, endIndex, animations) {
@@ -68,21 +68,70 @@ function quickSort(array, startIndex, endIndex, animations) {
 }
 
 function partition(array, startIndex, endIndex, animations){
-	const pivot = array[Math.floor((startIndex + endIndex) / 2)];
-	while (startIndex <= endIndex) {
-		while (array[startIndex] < pivot) {
-			startIndex++;
-		}
+	var i = startIndex;
+	var j = endIndex;
 
-		while (array[endIndex] > pivot) {
-			endIndex--;
-		}
+	for (let k = startIndex; k <= endIndex; k++) {
+		animations.push([1, k]);
+	}
+	
+	var pivotIndex = Math.floor((i + j) / 2);
+	animations.push([2, pivotIndex])
+	const pivot = array[pivotIndex];
 
-		if (startIndex <= endIndex){
-			let temp = array[startIndex];
-			array[startIndex++] = array[endIndex];
-			array[endIndex--] = temp;
+	animations.push([3, i]);
+	animations.push([3, j]);
+
+	while (i <= j) {
+		while (array[i] < pivot) {
+			animations.push([0, i]);
+			i++;
+			animations.push([3, i])
+		}
+		
+		while (array[j] > pivot) {
+			animations.push([0, j]);
+			j--;
+			animations.push([3, j]);
+		}
+		
+		if (i <= j){
+			animations.push([0, i]);
+			animations.push([0, j]);
+
+			animations.push([4, i, j]);
+			
+			let temp = array[i];
+			array[i++] = array[j];
+			array[j--] = temp;
+
+			if (i - 1 === pivotIndex) {
+				pivotIndex = j + 1;
+				animations.push([2, pivotIndex]);
+			} else if (j + 1 === pivotIndex) {
+				pivotIndex = i - 1;
+				animations.push([2, pivotIndex]);
+			}
+
+			if (i < array.length) {
+				animations.push([3, i]);
+			}
+
+			if (j > 0) {
+				animations.push([3, j]);
+			}
 		}
 	}
-	return startIndex;
+	animations.push([0, pivotIndex]);
+
+	if (i < array.length) {
+		animations.push([0, i]);
+	}
+
+	if (j > 0) {
+		animations.push([0, j]);
+	}
+
+	
+	return i;
 }

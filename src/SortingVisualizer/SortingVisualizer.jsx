@@ -2,7 +2,7 @@ import React from 'react';
 import './SortingVisualizer.css';
 import * as SortingAlgorithms from '../SortingAlgorithms/SortingAlgorithms.js'
 
-const NB_ELEMENTS_INIT = 10;
+const NB_ELEMENTS_INIT = 100;
 const MIN_ELEMENTS = 5;
 const MAX_ELEMENTS = 200;
 const MIN_ELEMENT_VALUE = 5;
@@ -57,10 +57,10 @@ export class SortingVisualizer extends React.Component {
 				const color = i % 3 === 0 ? 'red': 'lightblue';
 				// if (this.state.sleep > 0){
 					// setTimeout(() => {
-					arrayBars[barOneId].style.backgroundColor = color;
-					arrayBars[barTwoId].style.backgroundColor = color;
-					await delay(this.state.sleep);
-					// }, i * this.state.sleep);
+						arrayBars[barOneId].style.backgroundColor = color;
+						arrayBars[barTwoId].style.backgroundColor = color;
+						await delay(this.state.sleep);
+						// }, i * this.state.sleep);
 				// }
 			} else {
 				// setTimeout(() => {
@@ -70,19 +70,40 @@ export class SortingVisualizer extends React.Component {
 					tempArray.splice(addIndex, 0, value);
 					this.setState({array: tempArray});
 					await delay(this.state.sleep);
-				// }, i * this.state.sleep);
+					// }, i * this.state.sleep);
+				}
+			}
+			this.setState({animation: false});
+	}
+	
+	async quickSort() {
+		const [animations] = SortingAlgorithms.getQuickSortEvents(this.state.array);
+		const arrayBars = document.getElementsByClassName('array-bar');
+		
+		this.setState({animation: true});
+		for (let i = 0; i < animations.length; i++) {
+			const [animation, barOneId, barTwoId] = animations[i];
+			if (animation === 4) {
+				let tempArray = this.state.array.slice();
+				let value1 = tempArray[barOneId];
+				let value2 = tempArray[barTwoId];
+				tempArray.splice(barOneId, 1);
+				tempArray.splice(barOneId, 0, value2);
+				tempArray.splice(barTwoId, 1);
+				tempArray.splice(barTwoId, 0, value1);
+				this.setState({array: tempArray});
+				await(delay(this.state.sleep));
+			} else {
+				let color = animation === 1 ? 'yellow' : animation === 2 ? 'red' : animation === 3 ? 'blue' : 'lightblue';
+				arrayBars[barOneId].style.backgroundColor = color;
+				if (color === 'blue') {
+					await delay(this.state.sleep);
+				}
 			}
 		}
 		this.setState({animation: false});
 	}
 	
-	quickSort() {
-		console.log(this.state.array);
-		var tempArray = SortingAlgorithms.getQuickSortEvents(this.state.array);
-		this.setState(tempArray);
-		console.log(this.state.array);
-	}
-
 	heapSort() {
 
 	}
