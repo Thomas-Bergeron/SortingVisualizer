@@ -105,14 +105,6 @@ function partition(array, startIndex, endIndex, animations){
 			array[i++] = array[j];
 			array[j--] = temp;
 
-			if (i - 1 === pivotIndex) {
-				pivotIndex = j + 1;
-				animations.push([2, pivotIndex]);
-			} else if (j + 1 === pivotIndex) {
-				pivotIndex = i - 1;
-				animations.push([2, pivotIndex]);
-			}
-
 			if (i < array.length) {
 				animations.push([3, i]);
 			}
@@ -122,7 +114,6 @@ function partition(array, startIndex, endIndex, animations){
 			}
 		}
 	}
-	animations.push([0, pivotIndex]);
 
 	if (i < array.length) {
 		animations.push([0, i]);
@@ -132,6 +123,11 @@ function partition(array, startIndex, endIndex, animations){
 		animations.push([0, j]);
 	}
 
-	
 	return i;
+}
+
+export function getHeapSortEvents(array) {
+	const animations = [];
+
+	return array;
 }
