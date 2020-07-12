@@ -101,9 +101,9 @@ function partition(array, startIndex, endIndex, animations){
 
 			animations.push([4, i, j]);
 			
-			let temp = array[i];
-			array[i++] = array[j];
-			array[j--] = temp;
+			swap(array, i, j);
+			i++;
+			j--;
 
 			if (i < array.length) {
 				animations.push([3, i]);
@@ -128,6 +128,83 @@ function partition(array, startIndex, endIndex, animations){
 
 export function getHeapSortEvents(array) {
 	const animations = [];
+	heapSort(array.slice(), array.length, animations);
+	return [animations];
+}
 
-	return array;
+function heapSort(array, nbElements, animations) {
+	heapify(array, nbElements, animations);
+
+	let end = nbElements - 1;
+	while (end > 0) {
+		animations.push([2, 0, end]);
+		swap(array, end, 0);
+		end--;
+		siftDown(array, 0, end, animations);
+	}
+}
+
+function heapify(array, nbElements, animations) {
+	let start = indexParentHeap(nbElements - 1);
+	while (start >= 0) {
+		siftDown(array, start, nbElements - 1, animations);
+		start--;
+	}
+}
+
+function siftDown(array, start, end, animations) {
+	let root = start;
+	while (indexLeftHeap(root) <= end) {
+		let child = indexLeftHeap(root);
+		let swapIndex = root;
+
+		animations.push([1, swapIndex]);
+		animations.push([1, child]);
+		animations.push([0, swapIndex]);
+		animations.push([0, child]);
+		if (array[swapIndex] < array[child]) {
+			swapIndex = child;
+		}
+		
+		
+		if (child + 1 <= end && array[swapIndex] < array[child + 1]) {
+			animations.push([1, swapIndex]);
+			animations.push([1, child + 1]);
+			animations.push([0, swapIndex]);
+			animations.push([0, child + 1]);
+			swapIndex = child + 1;
+		}
+		
+		
+		animations.push([1, swapIndex]);
+		animations.push([1, root]);
+		animations.push([0, swapIndex]);
+		animations.push([0, root]);
+		if (swapIndex === root) {
+			return;
+		} else {
+			animations.push([2, root, swapIndex]);
+			swap(array, root, swapIndex);
+			root = swapIndex;
+		}
+	}
+}
+
+function indexParentHeap(element) {
+	return Math.floor((element - 1) / 2);
+}
+
+function indexLeftHeap(element) {
+	return 2 * element + 1;
+}
+
+// function indexRightHeap(element) {
+// 	return 2 * element + 2;
+// }
+
+
+function swap(array, firstIndex, secondIndex) {
+	let temp = array[firstIndex];
+	array[firstIndex] = array[secondIndex];
+	array[secondIndex] = temp;
 }

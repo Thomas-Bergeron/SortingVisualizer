@@ -2,9 +2,9 @@ import React from 'react';
 import './SortingVisualizer.css';
 import * as SortingAlgorithms from '../SortingAlgorithms/SortingAlgorithms.js'
 
-const NB_ELEMENTS_INIT = 100;
+const NB_ELEMENTS_INIT = 50;
 const MIN_ELEMENTS = 5;
-const MAX_ELEMENTS = 200;
+const MAX_ELEMENTS = 100;
 const MIN_ELEMENT_VALUE = 5;
 const MAX_ELEMENT_VALUE = 900;
 
@@ -92,9 +92,9 @@ export class SortingVisualizer extends React.Component {
 				tempArray.splice(barTwoId, 1);
 				tempArray.splice(barTwoId, 0, value1);
 				this.setState({array: tempArray});
-				await(delay(this.state.sleep));
+				await delay(this.state.sleep);
 			} else {
-				let color = animation === 1 ? 'yellow' : animation === 2 ? 'red' : animation === 3 ? 'blue' : 'lightblue';
+				let color = animation === 1 ? 'yellow' : animation === 2 ? 'red' : animation === 3 ? 'blue' : animation === 5 ? 'orange' : 'lightblue';
 				arrayBars[barOneId].style.backgroundColor = color;
 				if (color === 'blue') {
 					await delay(this.state.sleep);
@@ -104,8 +104,35 @@ export class SortingVisualizer extends React.Component {
 		this.setState({animation: false});
 	}
 	
-	heapSort() {
+	async heapSort() {
+		// const tempArray = SortingAlgorithms.getHeapSortEvents(this.state.array);
+		// this.setState({array: tempArray});
+		const [animations] = SortingAlgorithms.getHeapSortEvents(this.state.array);
+		const arrayBars = document.getElementsByClassName('array-bar');
 
+		this.setState({animation: true});
+		console.log(animations);
+		for (let i = 0; i < animations.length; i++) {
+			const [animation, barOneId, barTwoId] = animations[i];
+			if (animation === 2) {
+				let tempArray = this.state.array.slice();
+				let value1 = tempArray[barOneId];
+				let value2 = tempArray[barTwoId];
+				tempArray.splice(barOneId, 1);
+				tempArray.splice(barOneId, 0, value2);
+				tempArray.splice(barTwoId, 1);
+				tempArray.splice(barTwoId, 0, value1);
+				this.setState({array: tempArray});
+				await delay(this.state.sleep);
+			} else {
+				let color = animation === 1 ? 'red' : 'lightblue';
+				arrayBars[barOneId].style.backgroundColor = color;
+				if (color === 'red') {
+					await delay(this.state.sleep);
+				}
+			}
+		}
+		this.setState({animation: false});
 	}
 
 	bubbleSort() {
