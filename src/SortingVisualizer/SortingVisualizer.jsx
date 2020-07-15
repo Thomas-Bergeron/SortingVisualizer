@@ -9,7 +9,7 @@ const MIN_ELEMENT_VALUE = 5;
 const MAX_ELEMENT_VALUE = 900;
 
 const DEFAULT_SLEEP_TIME = 10;
-const MIN_SLEEP_TIME = 1;
+const MIN_SLEEP_TIME = 0;
 const MAX_SLEEP_TIME = 1000;
 
 const algorithms = {
@@ -36,13 +36,11 @@ export class SortingVisualizer extends React.Component {
 	}
 
 	generateArray(nbElements) {
-		if (!this.state.animation) {
-			const array = [];
-			for (let i = 0; i < nbElements; i++) {
-				array.push(randomIntFromInterval(MIN_ELEMENT_VALUE, MAX_ELEMENT_VALUE));
-			}
-		this.setState({array});
+		const array = [];
+		for (let i = 0; i < nbElements; i++) {
+			array.push(randomIntFromInterval(MIN_ELEMENT_VALUE, MAX_ELEMENT_VALUE));
 		}
+		this.setState({array});
 	}
 	
 	async mergeSort() {
@@ -179,28 +177,26 @@ export class SortingVisualizer extends React.Component {
 	}
 
 	handleRadioEvent(event){
-		if (!this.state.animation) {
-			switch (event.target.id){
-				case "merge":
-					this.setState({algorithm: algorithms.MERGE});
-					break;
-				case "quick":
-					this.setState({algorithm: algorithms.QUICK});
-					break;
-				case "heap":
-					this.setState({algorithm: algorithms.HEAP});
-					break;
-				case "bubble":
-					this.setState({algorithm: algorithms.BUBBLE});
-					break;
-				default:
-					break;	
-			}
+		switch (event.target.id){
+			case "merge":
+				this.setState({algorithm: algorithms.MERGE});
+				break;
+			case "quick":
+				this.setState({algorithm: algorithms.QUICK});
+				break;
+			case "heap":
+				this.setState({algorithm: algorithms.HEAP});
+				break;
+			case "bubble":
+				this.setState({algorithm: algorithms.BUBBLE});
+				break;
+			default:
+				break;	
 		}
 	}
 
 	render() {
-		const {array, sleep} = this.state;
+		const {array, sleep, animation} = this.state;
 		
 		return (
 			<div className="whole-page">
@@ -217,7 +213,7 @@ export class SortingVisualizer extends React.Component {
 				</div>
 				
 				<div className="footer">
-					<button className="button text-button" onClick={() => this.generateArray(this.state.array.length)}>Generate New Array</button>
+					<button className="button text-button" onClick={() => this.generateArray(this.state.array.length)} disabled={animation}>Generate New Array</button>
 
 					<div className="option-container">
 						<div>
@@ -228,6 +224,7 @@ export class SortingVisualizer extends React.Component {
 									type="range"
 									id="sliderElements"
 									className="slider"
+									disabled={animation}
 									min={MIN_ELEMENTS}
 									max={MAX_ELEMENTS}
 									defaultValue={NB_ELEMENTS_INIT}
@@ -241,7 +238,7 @@ export class SortingVisualizer extends React.Component {
 								<label>{sleep}</label>
 								<input
 									type="range"
-									id="slider2"
+									id="sliderSleep"
 									className="slider"
 									min={MIN_SLEEP_TIME}
 									max={MAX_SLEEP_TIME}
@@ -254,31 +251,31 @@ export class SortingVisualizer extends React.Component {
 
 					<div className="algorithm-container">
 						<input type="radio" name="algorithms" id="merge" checked={this.state.algorithm === algorithms.MERGE}
-																		onChange={(event) => {this.handleRadioEvent(event)}}></input>
-																		{/* //onChange={event => this.setState({algorithm: algorithms.MERGE})}></input> */}
+																		onChange={(event) => {this.handleRadioEvent(event)}}
+																		disabled={animation}></input>
 							<label htmlFor="merge" className="algorithm-label algo1">
 								<span>Merge Sort</span>
 							</label>
 						<input type="radio" name="algorithms" id="quick" checked={this.state.algorithm === algorithms.QUICK}
-																		onChange={(event) => {this.handleRadioEvent(event)}}></input>
-																		{/* //onChange={event => this.setState({algorithm: algorithms.QUICK})}></input> */}
+																		onChange={(event) => {this.handleRadioEvent(event)}}
+																		disabled={animation}></input>
 							<label htmlFor="quick" className="algorithm-label algo2">
 								<span>Quick Sort</span>
 							</label>
 						<input type="radio" name="algorithms" id="heap" checked={this.state.algorithm === algorithms.HEAP}
-																		onChange={(event) => {this.handleRadioEvent(event)}}></input>
-																		{/* onChange={event => this.setState({algorithm: algorithms.HEAP})}></input> */}
+																		onChange={(event) => {this.handleRadioEvent(event)}}
+																		disabled={animation}></input>
 							<label htmlFor="heap" className="algorithm-label algo3">
 								<span>Heap Sort</span>
 							</label>
 						<input type="radio" name="algorithms" id="bubble" checked={this.state.algorithm === algorithms.BUBBLE}
-																		onChange={(event) => {this.handleRadioEvent(event)}}></input>
-																		{/* onChange={event => this.setState({algorithm: algorithms.BUBBLE})}></input> */}
+																		onChange={(event) => {this.handleRadioEvent(event)}}
+																		disabled={animation}></input>
 							<label htmlFor="bubble" className="algorithm-label algo4">
 								<span>Bubble Sort</span>
 							</label>
 					</div>
-					<button className="button round-button" onClick={() => this.sort()}>Sort!</button>
+					<button className="button round-button" onClick={() => this.sort()} disabled={animation}>Sort!</button>
 				</div>
 
 			</div>
