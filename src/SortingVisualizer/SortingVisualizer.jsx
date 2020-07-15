@@ -55,25 +55,19 @@ export class SortingVisualizer extends React.Component {
 			if (isColorChange) {
 				const [barOneId, barTwoId] = animations[i];
 				const color = i % 3 === 0 ? 'red': 'lightblue';
-				// if (this.state.sleep > 0){
-					// setTimeout(() => {
-						arrayBars[barOneId].style.backgroundColor = color;
-						arrayBars[barTwoId].style.backgroundColor = color;
-						await delay(this.state.sleep);
-						// }, i * this.state.sleep);
-				// }
+				arrayBars[barOneId].style.backgroundColor = color;
+				arrayBars[barTwoId].style.backgroundColor = color;
+				await delay(this.state.sleep);
 			} else {
-				// setTimeout(() => {
-					const [removeIndex, addIndex, value] = animations[i];
-					const tempArray = this.state.array.slice();
-					tempArray.splice(removeIndex, 1);
-					tempArray.splice(addIndex, 0, value);
-					this.setState({array: tempArray});
-					await delay(this.state.sleep);
-					// }, i * this.state.sleep);
-				}
+				const [removeIndex, addIndex, value] = animations[i];
+				const tempArray = this.state.array.slice();
+				tempArray.splice(removeIndex, 1);
+				tempArray.splice(addIndex, 0, value);
+				this.setState({array: tempArray});
+				await delay(this.state.sleep);
 			}
-			this.setState({animation: false});
+		}
+		this.setState({animation: false});
 	}
 	
 	async quickSort() {
@@ -105,8 +99,6 @@ export class SortingVisualizer extends React.Component {
 	}
 	
 	async heapSort() {
-		// const tempArray = SortingAlgorithms.getHeapSortEvents(this.state.array);
-		// this.setState({array: tempArray});
 		const [animations] = SortingAlgorithms.getHeapSortEvents(this.state.array);
 		const arrayBars = document.getElementsByClassName('array-bar');
 
@@ -135,8 +127,34 @@ export class SortingVisualizer extends React.Component {
 		this.setState({animation: false});
 	}
 
-	bubbleSort() {
+	async bubbleSort() {
+		const [animations] = SortingAlgorithms.getBubbleSortEvents(this.state.array);
+		const arrayBars = document.getElementsByClassName('array-bar');
 
+		this.setState({animation: true});
+		console.log(animations);
+		for (let i = 0; i < animations.length; i++) {
+			const [animation, barOneId, barTwoId] = animations[i];
+			if (animation === 2) {
+				let tempArray = this.state.array.slice();
+				let value1 = tempArray[barOneId];
+				let value2 = tempArray[barTwoId];
+				tempArray.splice(barOneId, 1);
+				tempArray.splice(barOneId, 0, value2);
+				tempArray.splice(barTwoId, 1);
+				tempArray.splice(barTwoId, 0, value1);
+				this.setState({array: tempArray});
+				await delay(this.state.sleep);
+			} else {
+				let color = animation === 1 ? 'red' : 'lightblue';
+				arrayBars[barOneId].style.backgroundColor = color;
+				arrayBars[barTwoId].style.backgroundColor = color;
+				if (color === 'red') {
+					await delay(this.state.sleep);
+				}
+			}
+		}
+		this.setState({animation: false});
 	}
 
 	sort() {
@@ -197,8 +215,6 @@ export class SortingVisualizer extends React.Component {
 					}}></div>
 					))}
 				</div>
-
-				{/* <div className="footer-top"></div> */}
 				
 				<div className="footer">
 					<button className="button text-button" onClick={() => this.generateArray(this.state.array.length)}>Generate New Array</button>

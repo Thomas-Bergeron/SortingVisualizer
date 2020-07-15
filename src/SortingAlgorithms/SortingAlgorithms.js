@@ -198,13 +198,31 @@ function indexLeftHeap(element) {
 	return 2 * element + 1;
 }
 
-// function indexRightHeap(element) {
-// 	return 2 * element + 2;
-// }
-
-
 function swap(array, firstIndex, secondIndex) {
 	let temp = array[firstIndex];
 	array[firstIndex] = array[secondIndex];
 	array[secondIndex] = temp;
+}
+
+export function getBubbleSortEvents(array) {
+	const animations = [];
+	bubbleSort(array.slice(), array.length, animations);
+	return [animations];
+}
+
+function bubbleSort(array, length, animations) {
+	let isSorted = true;
+	for (let i = 0; i < length - 1; i++) {
+		animations.push([1, i, i + 1]);
+		animations.push([0, i, i + 1]);
+		if (array[i] > array[i + 1]) {
+			isSorted = false;
+			animations.push([2, i, i + 1]);
+			swap(array, i, i + 1);
+		}
+	}
+
+	if (!isSorted) {
+		bubbleSort(array, length, animations);
+	}
 }
