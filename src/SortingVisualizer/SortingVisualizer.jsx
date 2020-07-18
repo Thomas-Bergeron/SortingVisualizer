@@ -113,12 +113,7 @@ export class SortingVisualizer extends React.Component {
 			if (animation === 4) {
 				// swap the elements
 				let tempArray = this.state.array.slice();
-				let value1 = tempArray[barOneId];
-				let value2 = tempArray[barTwoId];
-				tempArray.splice(barOneId, 1);
-				tempArray.splice(barOneId, 0, value2);
-				tempArray.splice(barTwoId, 1);
-				tempArray.splice(barTwoId, 0, value1);
+				this.swap(tempArray, barOneId, barTwoId);
 				this.setState({array: tempArray});
 				
 				// delay of the current sleep time
@@ -159,12 +154,7 @@ export class SortingVisualizer extends React.Component {
 			if (animation === 2) {
 				// swap elements
 				let tempArray = this.state.array.slice();
-				let value1 = tempArray[barOneId];
-				let value2 = tempArray[barTwoId];
-				tempArray.splice(barOneId, 1);
-				tempArray.splice(barOneId, 0, value2);
-				tempArray.splice(barTwoId, 1);
-				tempArray.splice(barTwoId, 0, value1);
+				this.swap(tempArray, barOneId, barTwoId);
 				this.setState({array: tempArray});
 				await delay(this.state.sleep);
 			} else {
@@ -202,12 +192,7 @@ export class SortingVisualizer extends React.Component {
 			if (animation === 2) {
 				// swap the elements
 				let tempArray = this.state.array.slice();
-				let value1 = tempArray[barOneId];
-				let value2 = tempArray[barTwoId];
-				tempArray.splice(barOneId, 1);
-				tempArray.splice(barOneId, 0, value2);
-				tempArray.splice(barTwoId, 1);
-				tempArray.splice(barTwoId, 0, value1);
+				this.swap(tempArray, barOneId, barTwoId);
 				this.setState({array: tempArray});
 
 				// delay of the current sleep time
@@ -228,6 +213,16 @@ export class SortingVisualizer extends React.Component {
 		}
 		// end of animation
 		this.setState({isAnimated: false});
+	}
+
+	// swap two elements in an array and 
+	swap(array, firstIndex, secondIndex) {
+		let value1 = array[firstIndex];
+		let value2 = array[secondIndex];
+		array.splice(firstIndex, 1);
+		array.splice(firstIndex, 0, value2);
+		array.splice(secondIndex, 1);
+		array.splice(secondIndex, 0, value1);
 	}
 
 	// selects the current sorting algorithm and calls the correct method to animate

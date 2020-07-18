@@ -162,16 +162,19 @@ function partition(array, startIndex, endIndex, animations){
 	return i;
 }
 
-
+// calls the heapSort and returns the animation array
 export function getHeapSortEvents(array) {
 	const animations = [];
 	heapSort(array.slice(), array.length, animations);
 	return [animations];
 }
 
+// heapSort function
 function heapSort(array, nbElements, animations) {
+	// place the elements in a binary tree
 	heapify(array, nbElements, animations);
-
+	
+	// starts iterating from the end
 	let end = nbElements - 1;
 	while (end > 0) {
 		animations.push([2, 0, end]);
@@ -181,30 +184,35 @@ function heapSort(array, nbElements, animations) {
 	}
 }
 
+// places elements of the array in a binary tree
 function heapify(array, nbElements, animations) {
+	// start from the parent of the last element
 	let start = indexParentHeap(nbElements - 1);
 	while (start >= 0) {
-		siftDown(array, start, nbElements - 1, animations);
-		start--;
+		// 
+		siftDown(array, start--, nbElements - 1, animations);
 	}
 }
 
+// puts the first element at the right place in the array
 function siftDown(array, start, end, animations) {
 	let root = start;
 	while (indexLeftHeap(root) <= end) {
 		let child = indexLeftHeap(root);
 		let swapIndex = root;
-
+		// compare the two values
 		animations.push([1, swapIndex]);
 		animations.push([1, child]);
 		animations.push([0, swapIndex]);
 		animations.push([0, child]);
 		if (array[swapIndex] < array[child]) {
+			// the child is greater so it needs to go up in the tree
 			swapIndex = child;
 		}
 		
 		
 		if (child + 1 <= end && array[swapIndex] < array[child + 1]) {
+			// right heap is greater than left heap
 			animations.push([1, swapIndex]);
 			animations.push([1, child + 1]);
 			animations.push([0, swapIndex]);
@@ -220,6 +228,7 @@ function siftDown(array, start, end, animations) {
 		if (swapIndex === root) {
 			return;
 		} else {
+			// put the biggest element at the highest place
 			animations.push([2, root, swapIndex]);
 			swap(array, root, swapIndex);
 			root = swapIndex;
@@ -227,38 +236,47 @@ function siftDown(array, start, end, animations) {
 	}
 }
 
+// returns the index of the parent of an element
 function indexParentHeap(element) {
 	return Math.floor((element - 1) / 2);
 }
 
+// returns the index of the left heap of a parent element
 function indexLeftHeap(element) {
 	return 2 * element + 1;
 }
 
+// swaps two elements of an array
 function swap(array, firstIndex, secondIndex) {
 	let temp = array[firstIndex];
 	array[firstIndex] = array[secondIndex];
 	array[secondIndex] = temp;
 }
 
+// calls the bubbleSort and returns the animation array
 export function getBubbleSortEvents(array) {
 	const animations = [];
 	bubbleSort(array.slice(), array.length, animations);
 	return [animations];
 }
 
+// bubbleSort function
 function bubbleSort(array, length, animations) {
 	let isSorted = true;
+	
+	// loop through all elements
 	for (let i = 0; i < length - 1; i++) {
 		animations.push([1, i, i + 1]);
 		animations.push([0, i, i + 1]);
 		if (array[i] > array[i + 1]) {
+			// left element greater than right one so we swap
 			isSorted = false;
 			animations.push([2, i, i + 1]);
 			swap(array, i, i + 1);
 		}
 	}
 
+	// call the funciton if the array is not sorted yet
 	if (!isSorted) {
 		bubbleSort(array, length, animations);
 	}
