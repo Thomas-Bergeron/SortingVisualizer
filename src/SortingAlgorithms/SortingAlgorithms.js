@@ -278,6 +278,6 @@ function bubbleSort(array, length, animations) {
 
 	// call the funciton if the array is not sorted yet
 	if (!isSorted) {
-		bubbleSort(array, length, animations);
+		bubbleSort(array, length - 1, animations);
 	}
 }
