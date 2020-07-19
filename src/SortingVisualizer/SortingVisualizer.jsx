@@ -276,7 +276,7 @@ export class SortingVisualizer extends React.Component {
 					className="array-bar"
 					key={index}
 					style={{
-						height: `${value/2}px`,
+						height: `${(MAX_ELEMENT_VALUE - value) / MAX_ELEMENT_VALUE * 100 + 3}%`,
 						backgroundColor: 'lightblue',
 					}}></div>
 					))}
