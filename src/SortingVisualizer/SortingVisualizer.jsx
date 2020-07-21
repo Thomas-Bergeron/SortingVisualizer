@@ -271,9 +271,10 @@ export class SortingVisualizer extends React.Component {
 		return (
 			<div className="whole-page">
 				<div className="array-container">
-				{array.map(value => (
+				{array.map((value, index) => (
 					<div
 					className="array-bar"
+					key={index}
 					style={{
 						height: `${(value - MIN_ELEMENT_VALUE) / MAX_ELEMENT_VALUE * 100 + 3}%`,
 						backgroundColor: 'lightblue',
